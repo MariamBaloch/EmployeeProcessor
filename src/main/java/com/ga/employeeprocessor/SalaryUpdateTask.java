@@ -15,6 +15,7 @@ public class SalaryUpdateTask implements Runnable {
     public void run() {
         try {
             semaphore.acquire();
+            Thread.sleep(500 + (long) (Math.random() * 2000));
 
             String threadName = Thread.currentThread().getName();
 
