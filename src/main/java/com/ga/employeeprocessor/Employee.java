@@ -16,5 +16,17 @@ public class Employee {
     private LocalDate joinDate;
     private Roles role;
     private double percentOfProjectCompleted;
+
+    public static Employee fromCsvLine(String line) {
+        String[] parts = line.split(",");
+        return new Employee(
+                Long.parseLong(parts[0].trim()),
+                parts[1].trim(),
+                Double.parseDouble(parts[2].trim()),
+                LocalDate.parse(parts[3].trim()),
+                Roles.valueOf(parts[4].trim()),
+                Double.parseDouble(parts[5].trim())
+        );
+    }
 }
 
