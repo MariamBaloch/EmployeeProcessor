@@ -9,6 +9,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         List<Employee> employees = EmployeeProcessor.getEmployeesFromFile("employees.csv");
+        System.out.printf("Starting salary update process for %d employees...%n", employees.size());
 
         Semaphore semaphore = new Semaphore(MAX_CONNECTIONS);
         List<Thread> threads = new ArrayList<>();
