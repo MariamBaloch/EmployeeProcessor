@@ -34,5 +34,10 @@ public class EmployeeProcessor {
 
         return yearsOfWorkCompleted * employee.getRole().getPercentageIncrease();
     }
+
+    public static double calculateNewSalary(Employee employee) {
+        double increasePercent = getPercentIncrease(employee);
+        return employee.getSalary() * (1 + increasePercent);
+    }
 }
 
