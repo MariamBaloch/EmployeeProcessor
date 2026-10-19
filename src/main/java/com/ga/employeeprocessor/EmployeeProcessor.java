@@ -15,6 +15,7 @@ public class EmployeeProcessor {
         Path path = Paths.get(fileName);
         try (Stream<String> lines = Files.lines(path)) {
             return lines
+                    .filter(line -> !line.trim().isEmpty())
                     .map(Employee::fromCsvLine)
                     .toList();
         } catch (IOException e) {
