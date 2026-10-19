@@ -8,11 +8,13 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Employee {
     private Long id;
     private String name;
     private double salary;
     private LocalDate joinDate;
     private Roles role;
+    private double percentOfProjectCompleted;
 }
 
