@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class Main {
+    private static final int MAX_CONNECTIONS = 5;
 
     public static void main(String[] args) throws InterruptedException {
         List<Employee> employees = EmployeeProcessor.getEmployeesFromFile("employees.csv");
 
-        Semaphore semaphore = new Semaphore(5);
+        Semaphore semaphore = new Semaphore(MAX_CONNECTIONS);
         List<Thread> threads = new ArrayList<>();
 
         for (Employee employee : employees) {
