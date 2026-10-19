@@ -19,6 +19,9 @@ public class Employee {
 
     public static Employee fromCsvLine(String line) {
         String[] parts = line.split(",");
+        if (parts.length < 6) {
+            throw new IllegalArgumentException("Invalid CSV line: " + line);
+        }
         return new Employee(
                 Long.parseLong(parts[0].trim()),
                 parts[1].trim(),
