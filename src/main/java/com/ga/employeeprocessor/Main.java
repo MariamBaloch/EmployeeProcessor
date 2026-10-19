@@ -24,6 +24,12 @@ public class Main {
         for (Thread thread : threads) {
             thread.join();
         }
+
+        System.out.println("\n=== Processing Summary ===");
+        employees.forEach(employee ->
+                System.out.printf("  %s: %.2f%n", employee.getName(), employee.getSalary())
+        );
+        System.out.println("========================");
     }
 }
 
