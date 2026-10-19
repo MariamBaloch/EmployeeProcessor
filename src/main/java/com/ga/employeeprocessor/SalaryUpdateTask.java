@@ -13,11 +13,12 @@ public class SalaryUpdateTask implements Runnable {
 
     @Override
     public void run() {
+        boolean acquired = false;
+        String threadName = Thread.currentThread().getName();
+
         try {
             semaphore.acquire();
-            Thread.sleep(500 + (long) (Math.random() * 2000));
-
-            String threadName = Thread.currentThread().getName();
+            acquired = true;
 
             synchronized (System.out) {
                 System.out.printf(
@@ -28,15 +29,19 @@ public class SalaryUpdateTask implements Runnable {
                 );
             }
 
+            Thread.sleep(500 + (long) (Math.random() * 2000));
+
             double oldSalary = employee.getSalary();
-            double increasePercent = EmployeeProcessor.getPercentIncrease(employee);
-            double newSalary = EmployeeProcessor.calculateNewSalary(employee);
+            double increasePercent =
+                    EmployeeProcessor.getPercentIncrease(employee);
+            double newSalary = oldSalary * (1 + increasePercent);
 
             employee.setSalary(newSalary);
 
             synchronized (System.out) {
                 System.out.printf(
-                        "[%s] Finished: %s | Salary: %.2f -> %.2f (Increase: %.1f%%)%n",
+                        "[%s] Finished: %s | Salary: %.2f -> %.2f " +
+                                "(Increase: %.1f%%)%n",
                         threadName,
                         employee.getName(),
                         oldSalary,
@@ -48,8 +53,9 @@ public class SalaryUpdateTask implements Runnable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
-            semaphore.release();
+            if (acquired) {
+                semaphore.release();
+            }
         }
     }
 }
-
