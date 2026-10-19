@@ -9,6 +9,14 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         List<Employee> employees = EmployeeProcessor.getEmployeesFromFile("employees.csv");
+
+        System.out.println("\n=== Original Salary Summary ===");
+        employees.forEach(employee ->
+                System.out.printf("  %s: %.2f%n",
+                        employee.getName(), employee.getSalary())
+        );
+        System.out.println("===============================");
+
         System.out.printf("Starting salary update process for %d employees...%n", employees.size());
 
         Semaphore semaphore = new Semaphore(MAX_CONNECTIONS);
@@ -26,11 +34,11 @@ public class Main {
             thread.join();
         }
 
-        System.out.println("\n=== Processing Summary ===");
+        System.out.println("\n=== Updated Salary Summary ===");
         employees.forEach(employee ->
-                System.out.printf("  %s: %.2f%n", employee.getName(), employee.getSalary())
+                System.out.printf("  %s: %.2f%n",
+                        employee.getName(), employee.getSalary())
         );
-        System.out.println("========================");
+        System.out.println("==============================");
     }
 }
-
