@@ -1,58 +1,97 @@
 # Employee Processor
 
-A Java application that processes employee salary updates concurrently using multi-threading.
+A Spring Boot application that reads employee records from a CSV file and processes salary updates concurrently.
 
-## Features
+## Requirements
 
-- Reads employee data from CSV files
-- Calculates salary increases based on role, tenure, and project completion
-- Processes employees concurrently with semaphore-based thread limiting
-- Thread-safe output logging
+- Java 17 or later
+- Maven 3.6 or later
 
-## Prerequisites
+## Build and run
 
-- Java 17 or higher
-- Maven 3.6+
-
-## Building
+Build the application:
 
 ```bash
-mvn clean compile
+mvn clean package
 ```
 
-## Running
-
-After building the project, run the application using the compiled classes:
+Start the web application:
 
 ```bash
-mvn clean compile
-java -cp target/classes com.ga.employeeprocessor.Main
+mvn spring-boot:run
 ```
 
-## Salary Increase Logic
+The server listens on port `8080`. Submit a request to start processing:
 
-An employee is eligible for a salary increase if:
-- Their project completion is at least 60%
-- They have completed at least 1 year of service
-
-The increase percentage is calculated as:
-```
-yearsOfService × rolePercentageIncrease
+```bash
+curl -X POST http://localhost:8080/employees/process
 ```
 
-Role-based increase rates:
-- Director: 5% per year
-- Manager: 2% per year
-- Employee: 1% per year
+The endpoint processes the CSV records and returns a completion message. Detailed per-employee progress and salary
+summaries are printed to the server terminal. Access swagger to run the API
+directly [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html).
 
-## Project Structure
+You can also run the packaged application:
 
+```bash
+java -jar target/EmployeeProcessor-1.0-SNAPSHOT.jar
 ```
+
+## Employee data
+
+The application reads `employees.csv` from its current working directory. The repository includes a sample file. Each
+line must contain these comma-separated values, in order, with no header row:
+
+```text
+id,name,salary,joinDate,role,percentOfProjectCompleted
+```
+
+For example:
+
+```text
+1,Alice,52000.0,2019-05-12,Employee,0.8
+```
+
+Use an ISO date (`YYYY-MM-DD`) for `joinDate`. The role must be `Director`, `Manager`, or `Employee`, and project
+completion is a decimal fraction from `0.0` to `1.0`.
+
+## Salary increase logic
+
+An employee receives an increase only if project completion is at least 60% and they have completed at least one full
+year of service. The increase is calculated as:
+
+```text
+yearsOfService × roleIncreasePerYear
+```
+
+| Role     | Increase per year |
+|----------|------------------:|
+| Director |                5% |
+| Manager  |                2% |
+| Employee |                1% |
+
+## Concurrency and output
+
+Each employee is processed in a separate thread, with a semaphore limiting processing to five employees at a time.
+Salary updates are calculated independently for each employee, and terminal log output is synchronized to keep each
+message intact.
+
+## Project structure
+
+```text
 src/main/java/com/ga/employeeprocessor/
-├── Main.java              # Application entry point
-├── Employee.java          # Employee data model
-├── EmployeeProcessor.java # CSV reading and salary calculation
-├── SalaryUpdateTask.java  # Concurrent salary update task
-└── Roles.java             # Employee role enum
+├── EmployeeProcessorApplication.java
+├── controller/
+│   └── EmployeeController.java
+├── enums/
+│   └── Roles.java
+├── model/
+│   └── Employee.java
+└── service/
+    ├── EmployeeProcessor.java
+    ├── EmployeeService.java
+    └── SalaryUpdateTask.java
+src/main/resources/
+└── application.properties
+employees.csv
 ```
-
