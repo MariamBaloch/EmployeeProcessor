@@ -1,4 +1,6 @@
-package com.ga.employeeprocessor;
+package com.ga.employeeprocessor.service;
+
+import com.ga.employeeprocessor.model.Employee;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,13 +1,18 @@
-package com.ga.employeeprocessor;
+package com.ga.employeeprocessor.service;
+
+import com.ga.employeeprocessor.model.Employee;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-public class Main {
+@Service
+public class EmployeeService {
+
     private static final int MAX_CONNECTIONS = 5;
 
-    public static void main(String[] args) throws InterruptedException {
+    public void processEmployees() throws InterruptedException {
         List<Employee> employees = EmployeeProcessor.getEmployeesFromFile("employees.csv");
 
         System.out.println("\n=== Original Salary Summary ===");

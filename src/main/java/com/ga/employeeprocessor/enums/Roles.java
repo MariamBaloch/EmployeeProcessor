@@ -1,4 +1,4 @@
-package com.ga.employeeprocessor;
+package com.ga.employeeprocessor.enums;
 
 import lombok.Getter;
 

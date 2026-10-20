@@ -1,5 +1,6 @@
-package com.ga.employeeprocessor;
+package com.ga.employeeprocessor.model;
 
+import com.ga.employeeprocessor.enums.Roles;
 import lombok.*;
 
 import java.time.LocalDate;
